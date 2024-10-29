@@ -1,0 +1,46 @@
+{
+  "name": "@devsobrinho/edge-tts",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Daniel Sobrinho",
+  "license": "MIT",
+  "description": "Server-side implementation of the Edge TTS package — utilizing the Microsoft Edge Read Aloud API to generate text-to-speech with support for data streaming or Base64 encoding",
+  "homepage": "https://github.com/devsobrinho/edge-tts#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devsobrinho/edge-tts.git"
+  },
+  "bugs": {
+    "type": "git",
+    "url": "https://github.com/devsobrinho/edge-tts.git/issues"
+  },
+  "keywords": [
+    "typescript",
+    "speech api",
+    "edge-tts",
+    "audio-processing",
+    "websocket",
+    "nodejs"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "ts-node tests/index.test.ts"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^18.17.1",
+    "@types/ws": "^8.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
