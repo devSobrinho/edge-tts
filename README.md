@@ -106,4 +106,6 @@ console.log("Base64 Audio:", base64Audio);
 
 We would like to thank the developers and contributors of related projects for their valuable groundwork and inspiration, including:
 
-- [rany2/edge-tts](https://github.com/rany2/edge-tts/tree/master/examples)
+- [Examples from rany2/edge-tts](https://github.com/rany2/edge-tts/tree/master/examples)
+- [Utility functions in rany2/edge-tts](https://github.com/rany2/edge-tts/blob/master/src/edge_tts/util.py)
+- [HASS Edge TTS Integration](https://github.com/hasscc/hass-edge-tts/blob/main/custom_components/edge_tts/tts.py)
