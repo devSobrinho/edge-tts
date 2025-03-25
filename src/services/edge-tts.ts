@@ -122,7 +122,7 @@ export class EdgeTTS {
     const reqId = generate.uuid();
     const configMessageSSML = ttsConfig.buildTTSConfigMessage();
     const ssml = ttsConfig.buildSSML(text);
-    await this.sendSSMLWithReconnect(stream, reqId, configMessageSSML, ssml);
+    void this.sendSSMLWithReconnect(stream, reqId, configMessageSSML, ssml);
   }
 
   private async sendSSMLWithReconnect(
@@ -168,13 +168,23 @@ export class EdgeTTS {
         const speechMessage = `X-RequestId:${reqId}\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:${new Date().toISOString()}Z\r\nPath:ssml\r\n\r\n${ssml}`;
         this.ws.send(speechMessage);
         cbOpen(true);
+        resolve();
       });
 
-      this.ws.on("message", (data) => stream.push(data));
+      this.ws.on("message", (data) => {
+        stream.push(data);
+
+        const isTurnEnd =
+          typeof data === "string"
+            ? (data as string).includes("Path:turn.end")
+            : Buffer.isBuffer(data) &&
+              data.toString("utf-8").includes("Path:turn.end");
+
+        if (isTurnEnd) this.ws.close();
+      });
 
       this.ws.on("close", () => {
         stream.end(() => stream.emit("close"));
-        resolve();
       });
 
       this.ws.on("error", (err) => {
