@@ -103,7 +103,7 @@ class EdgeTTS {
             const reqId = generate_1.default.uuid();
             const configMessageSSML = ttsConfig.buildTTSConfigMessage();
             const ssml = ttsConfig.buildSSML(text);
-            yield this.sendSSMLWithReconnect(stream, reqId, configMessageSSML, ssml);
+            void this.sendSSMLWithReconnect(stream, reqId, configMessageSSML, ssml);
         });
     }
     sendSSMLWithReconnect(stream_2, reqId_1, configMessageSSML_1, ssml_1) {
@@ -136,11 +136,21 @@ class EdgeTTS {
                     const speechMessage = `X-RequestId:${reqId}\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:${new Date().toISOString()}Z\r\nPath:ssml\r\n\r\n${ssml}`;
                     this.ws.send(speechMessage);
                     cbOpen(true);
+                    resolve();
                 });
-                this.ws.on("message", (data) => stream.push(data));
+                this.ws.on("message", (data) => {
+                    stream.push(data);
+                    const isTurnEnd = typeof data === "string"
+                        ? data.includes("Path:turn.end")
+                        : Buffer.isBuffer(data) &&
+                            data.toString("utf-8").includes("Path:turn.end");
+                    if (isTurnEnd) {
+                        this.ws.close();
+                        stream.emit("close");
+                    }
+                });
                 this.ws.on("close", () => {
                     stream.end(() => stream.emit("close"));
-                    resolve();
                 });
                 this.ws.on("error", (err) => {
                     stream.end(() => stream.emit("error", err));
