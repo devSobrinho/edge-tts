@@ -180,7 +180,10 @@ export class EdgeTTS {
             : Buffer.isBuffer(data) &&
               data.toString("utf-8").includes("Path:turn.end");
 
-        if (isTurnEnd) this.ws.close();
+        if (isTurnEnd) {
+          this.ws.close();
+          stream.emit("close");
+        }
       });
 
       this.ws.on("close", () => {
